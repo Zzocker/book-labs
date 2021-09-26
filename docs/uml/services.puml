@@ -1,0 +1,26 @@
+@startuml
+
+title "Book Sharing Services"
+
+entity "Front-End/Client" as consumer
+
+component "Services" #Aquamarine{
+    node "Application" as app
+
+    component "Internal-Communication(gRPC)" #LightCoral{
+        node "O-Auth" as oauth
+        node "User-Profile" as userProfile
+        node "Books" as books
+        node "Comment" as comment
+        node "Order" as order
+    }
+
+    app <-->  oauth : gRPC
+    app <--> userProfile : gRPC
+    app <--> books : gRPC
+    app <--> comment : gRPC
+    app <--> order : gRPC
+}
+
+consumer -> app : REST CALL
+@enduml
