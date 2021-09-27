@@ -1,0 +1,27 @@
+@startuml
+
+component "Services" #LightSalmon{
+
+    node "O-Auth" as auth
+    node "User-Profile" as userProfile
+    node "Books" as books
+    node "Comment" as comment
+
+    database "S3" as s3
+    note right of s3: sotre media files
+
+    database "redis" as redis
+    database "MongoDB" as mongodb
+
+    auth --> redis : get/put/del token
+
+    comment --> s3 : store media file\npresent in a comment
+    userProfile --> s3 : store user\nprofile picture
+    books --> s3 : store book\ncover picture
+
+    userProfile ----> mongodb : store user's profile details
+    books ----> mongodb : store book details
+    comment ----> mongodb : store comments
+}
+
+@enduml

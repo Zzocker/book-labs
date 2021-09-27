@@ -17,6 +17,10 @@ A platform allowing college student to share hard copy of book among themselves.
 This application uses a micro-service architecture, with one service [Application](#application) responsible for exposing REST Endpoint for the client and routing user's request to required services. gRPC connection is ued for internal communication between the service.
 
 ![services](docs/img/services.png)
+
+**deployment**
+
+![deployment](docs/img/deployment.png)
 ### Application
 
 Services responsible for routing, user's client to the respective service. This service exposes REST Endpoint which will be consumed by the front-end. Further routing of request to the various services done through gRPC connections.
