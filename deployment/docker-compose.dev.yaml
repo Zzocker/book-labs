@@ -1,0 +1,50 @@
+version: "3.9"
+
+networks:
+  book_sharing:
+
+volumes:
+  mongo_db:
+  redis_db:
+  localS3:
+  
+services:
+  mongo_db:
+    container_name: mongo_db
+    image: mongo:5
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pw
+    ports:
+      - 27017:27017
+    networks:
+      - book_sharing
+    volumes:
+      - mongo_db:/data/db
+  redis:
+    container_name: redis_db
+    image: redis:6
+    ports:
+      - 6379:6379
+    networks:
+      - book_sharing
+    volumes:
+      - redis_db:/data
+  localS3:
+    container_name: localS3
+    image: localstack/localstack:0.12.18
+    ports:
+      - 4566:4566
+      - 4571:4571
+      - 8080:8080
+    environment:
+      - SERVICES=s3
+      - DEBUG=DEBUG
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8080
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - localS3:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - book_sharing
