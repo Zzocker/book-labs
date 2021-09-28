@@ -15,7 +15,7 @@ const (
 	SeverityDebug
 )
 
-type err struct {
+type Error struct {
 	e        error
 	op       Op
 	code     Code
@@ -25,13 +25,13 @@ type err struct {
 
 // Error : to support in-build error
 // interface.
-func (e *err) Error() string {
+func (e *Error) Error() string {
 	return e.e.Error()
 }
 
 // Construct a new stack based error.
 func E(args ...interface{}) error {
-	e := &err{}
+	e := &Error{}
 	for _, arg := range args {
 		switch arg := arg.(type) {
 		case error:
@@ -54,12 +54,12 @@ func E(args ...interface{}) error {
 
 // Ops : return list of operation ids from error stack.
 func Ops(e error) []Op {
-	er, ok := e.(*err)
+	er, ok := e.(*Error)
 	if !ok {
 		return nil
 	}
 	out := []Op{er.op}
-	subErr, ok := er.e.(*err)
+	subErr, ok := er.e.(*Error)
 	if !ok {
 		return out
 	}
@@ -69,7 +69,7 @@ func Ops(e error) []Op {
 }
 
 func ErrCode(e error) Code {
-	er, ok := e.(*err)
+	er, ok := e.(*Error)
 	if !ok {
 		return CodeUnexpected
 	}
@@ -81,7 +81,7 @@ func ErrCode(e error) Code {
 }
 
 func ErrReqID(e error) ReqID {
-	er, ok := e.(*err)
+	er, ok := e.(*Error)
 	if !ok {
 		return ""
 	}
@@ -93,7 +93,7 @@ func ErrReqID(e error) ReqID {
 }
 
 func ErrSeverity(e error) Severity {
-	er, ok := e.(*err)
+	er, ok := e.(*Error)
 	if !ok {
 		return SeverityError
 	}
