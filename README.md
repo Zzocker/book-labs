@@ -1,8 +1,8 @@
-# book-shaing
+# book-labs
 
 A platform allowing college student to share hard copy of book among themselves.
 
-- [book-shaing](#book-shaing)
+- [book-labs](#book-labs)
   - [Services](#services)
     - [Application](#application)
     - [O-Auth](#o-auth)

@@ -1,4 +1,4 @@
-module github.com/Zzocker/book-shaing
+module github.com/Zzocker/book-labs
 
 go 1.16
 

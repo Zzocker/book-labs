@@ -5,7 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Zzocker/book-shaing/pkg/errors"
+	"github.com/Zzocker/book-labs/pkg/errors"
 )
 
 var lg *logger //nolint:gochecknoglobals //it's ok

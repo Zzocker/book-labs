@@ -1,6 +1,6 @@
 linters-settings:
   gci:
-    local-prefixes: github.com/Zzocker/book-shaing
+    local-prefixes: github.com/Zzocker/book-labs
   dupl:
     threshold: 100
   errcheck:
