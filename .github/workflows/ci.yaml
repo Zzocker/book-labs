@@ -10,3 +10,16 @@ jobs:
         uses: actions/checkout@v2
       - uses: actions/setup-go@v2
       - uses: golangci/golangci-lint-action@v2
+  test:
+    name: test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: install docker-compose
+        run: sudo chmod +x /usr/local/bin/docker-compose
+      - uses: actions/checkout@v2
+      - name: start components
+        run: docker-compose -f deployment/docker-compose.dev.yaml up -d
+      - name: s3 migration
+        run: ./migration/s3.sh
+      - name: Run test
+        run: make test
