@@ -26,3 +26,15 @@ type DumbDataStore interface {
 	Get(ctx context.Context, key string) ([]byte, error)
 	Delete(ctx context.Context, key string) error
 }
+
+// SmartDS : represnets a datastore which support query feature
+// eg : mongo.
+type SmartDataStore interface {
+	Store(ctx context.Context, in interface{}) error
+	Get(ctx context.Context, filter map[string]interface{}) ([]byte, error)
+	Update(ctx context.Context, filter map[string]interface{}, in interface{}) error
+	UpdateMatching(ctx context.Context, query map[string]interface{}, in interface{}) error
+	Delete(ctx context.Context, filter map[string]interface{}) error
+	Query(ctx context.Context, sortingKey string, query map[string]interface{}, pageNumber, perPage int64) ([][]byte, error)
+	DeleteMatching(ctx context.Context, query map[string]interface{}) error
+}

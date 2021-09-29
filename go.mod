@@ -7,5 +7,6 @@ require (
 	github.com/gomodule/redigo v1.8.5
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
+	go.mongodb.org/mongo-driver v1.7.2
 	google.golang.org/grpc v1.41.0
 )
