@@ -16,8 +16,8 @@ const (
 )
 
 type Error struct {
-	e        error
 	op       Op
+	e        error
 	code     Code
 	reqID    ReqID
 	severity Severity
