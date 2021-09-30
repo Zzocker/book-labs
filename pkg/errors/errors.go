@@ -52,6 +52,27 @@ func E(args ...interface{}) error {
 	return e
 }
 
+func Set(err error, arg interface{}) {
+	e, ok := err.(*Error)
+	if !ok {
+		return
+	}
+	switch arg := arg.(type) {
+	case error:
+		e.e = arg
+	case Op:
+		e.op = arg
+	case Code:
+		e.code = arg
+	case ReqID:
+		e.reqID = arg
+	case Severity:
+		e.severity = arg
+	default:
+		panic("bad call to error constructor")
+	}
+}
+
 // Ops : return list of operation ids from error stack.
 func Ops(e error) []Op {
 	er, ok := e.(*Error)
