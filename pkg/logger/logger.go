@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/codes"
 
 	"github.com/Zzocker/book-labs/pkg/errors"
 )
@@ -38,11 +39,8 @@ func NewServiceLogger(level, srName, version string) {
 	}
 	log := logrus.New()
 	log.SetLevel(l)
-	format := &logrus.TextFormatter{
-		DisableSorting:  true,
-		FullTimestamp:   true,
+	format := &logrus.JSONFormatter{
 		TimestampFormat: "15:04:05 02/01/2006",
-		PadLevelText:    true,
 	}
 	log.SetFormatter(format)
 	log.SetReportCaller(false)
@@ -98,7 +96,7 @@ func SystemErr(err error) {
 
 	entry := lg.lg.WithFields(map[string]interface{}{
 		"operations": errors.Ops(err),
-		"code":       errors.ErrCode(err),
+		"code":       codes.Code(errors.ErrCode(err)).String(),
 		"request_id": errors.ErrReqID(err),
 	})
 
