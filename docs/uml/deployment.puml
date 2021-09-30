@@ -2,7 +2,7 @@
 
 component "Services" #LightSalmon{
 
-    node "O-Auth" as auth
+    node "Application" as app
     node "User-Profile" as userProfile
     node "Books" as books
     node "Comment" as comment
@@ -13,7 +13,7 @@ component "Services" #LightSalmon{
     database "redis" as redis
     database "MongoDB" as mongodb
 
-    auth --> redis : get/put/del token
+    app --> redis : get/put/del token
 
     comment --> s3 : store media file\npresent in a comment
     userProfile --> s3 : store user\nprofile picture

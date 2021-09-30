@@ -5,7 +5,6 @@ A platform allowing college student to share hard copy of book among themselves.
 - [book-labs](#book-labs)
   - [Services](#services)
     - [Application](#application)
-    - [O-Auth](#o-auth)
     - [User-Profile](#user-profile)
     - [Comment](#comment)
     - [Books](#books)
@@ -23,11 +22,7 @@ This application uses a micro-service architecture, with one service [Applicatio
 ![deployment](docs/img/deployment.png)
 ### Application
 
-Services responsible for routing, user's client to the respective service. This service exposes REST Endpoint which will be consumed by the front-end. Further routing of request to the various services done through gRPC connections.
-
-### O-Auth
-
-Service responsible for authenticating user's request to the book-sharing application.
+Services responsible for routing, user's client to the respective service. This service exposes REST Endpoint which will be consumed by the front-end. Further routing of request to the various services done through gRPC connections.Service also responsible for authenticating user's request to the book-sharing application.
 
 ### User-Profile
 
