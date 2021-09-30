@@ -1,0 +1,8 @@
+app:
+  port: 9001
+  version: 1.0.0
+  log_level: debug
+  oauth_redis:
+    expiry_s: 604800
+    url: localhost:6379
+    database: 5
