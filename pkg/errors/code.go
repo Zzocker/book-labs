@@ -1,6 +1,8 @@
 package errors
 
 import (
+	"net/http"
+
 	"google.golang.org/grpc/codes"
 )
 
@@ -16,3 +18,20 @@ const (
 	CodeUnexpected    Code = Code(codes.Internal)
 	CodeAlreadyExists Code = Code(codes.AlreadyExists)
 )
+
+func ErrCodeToHTTP(c Code) int {
+	switch c {
+	case CodeNotFound:
+		return http.StatusNotFound
+	case CodeUnauthorized:
+		return http.StatusUnauthorized
+	case CodeInvalidInput:
+		return http.StatusBadRequest
+	case CodeUnexpected:
+		return http.StatusInternalServerError
+	case CodeAlreadyExists:
+		return http.StatusConflict
+	default:
+		return http.StatusInternalServerError
+	}
+}
