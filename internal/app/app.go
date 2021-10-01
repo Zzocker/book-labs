@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 
 	"github.com/Zzocker/book-labs/config"
 	v1 "github.com/Zzocker/book-labs/internal/app/delivery/http/v1"
@@ -28,9 +29,18 @@ func Run(cfg *config.BookSharing) {
 	})
 	// services
 	authService := auth.NewAuthService(redisStore, cfg.App.OAuthRedis.ExpiryS)
+
+	// gRPC channels
+	rpcChannelUserProfile, err := grpc.Dial(net.JoinHostPort("127.0.0.1", cfg.UserProfile.Port), grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
+	defer rpcChannelUserProfile.Close()
 	//
 	engine := gin.New()
-	v1.NewRouter(engine, authService)
+	v1.NewRouter(engine, authService, v1.GRPCChannel{
+		Userprofile: rpcChannelUserProfile,
+	})
 
 	server := http.Server{
 		Handler:      engine,

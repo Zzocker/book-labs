@@ -1,3 +1,4 @@
+# Services configs
 app:
   port: 9001
   version: 1.0.0
@@ -6,3 +7,21 @@ app:
     expiry_s: 604800
     url: localhost:6379
     database: 5
+userprofile:
+  port: 9002
+  version: 1.0.0
+  log_level: debug
+  collection_name: userprofile
+  s3_bucket_name: dev
+
+# Datastore configs
+mongo_db:
+  url: localhost:27017
+  username: root
+  password: pw
+  database: dev
+s3:
+  endpoint: http://localhost:4566
+  access_key_id: test
+  secret_access_key: test
+  region: ap-southeast-1

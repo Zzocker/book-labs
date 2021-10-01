@@ -1,0 +1,49 @@
+syntax="proto3";
+
+import "common/common.proto";
+
+option go_package="github.com/Zzocker/book-labs/protos/profile";
+
+package profile;
+
+message UpdateProfileRequest{
+    string Username=1;
+    string Email=2;
+    string Name=3;
+    string Password=4;
+    bytes ProfilePic=5;
+}
+
+message QueryProfileRequest{
+    string Name=1;
+    string Email=2;
+}
+
+message CheckCredRequest{
+    string Username=1;
+    string Password=2;
+}
+
+message UsernameRequest{
+    string Username=1;
+}
+
+message Profile{
+    string Username=1;
+    string Email=2;
+    string Name=3;
+}
+
+message Profiles{
+    repeated Profile Profile=1;
+}
+
+service UserProfile{
+    rpc CreateProfile (UpdateProfileRequest) returns (common.EmptyRequest);
+    rpc QueryProfile (QueryProfileRequest) returns (Profiles);
+    rpc UpdateProfile (UpdateProfileRequest) returns (Profile);
+    rpc DeleteProfile (UsernameRequest) returns (common.EmptyRequest);
+    rpc GetProfile(UsernameRequest) returns (Profile);
+    rpc GetProfilePic(UsernameRequest) returns (common.Image);
+    rpc CheckCred(CheckCredRequest) returns (common.EmptyRequest);
+}

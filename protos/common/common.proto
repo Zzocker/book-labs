@@ -1,0 +1,12 @@
+syntax="proto3";
+
+package common;
+
+option go_package="github.com/Zzocker/book-labs/protos/common";
+
+message EmptyRequest{
+}
+
+message Image{
+    bytes Data=1;
+}
