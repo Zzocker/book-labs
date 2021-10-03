@@ -39,7 +39,7 @@ func NewRouter(engine *gin.Engine, auth service.Auth, channels GRPCChannel) {
 
 	h := engine.Group("/api/v1")
 	{
-		newAuthRouters(h, auth)
+		newAuthRouters(h, auth, channels.Userprofile)
 	}
 
 	authorized := engine.Group("/api/v1")

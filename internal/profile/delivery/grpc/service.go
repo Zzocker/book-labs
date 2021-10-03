@@ -40,7 +40,14 @@ func (s *server) QueryProfile(ctx context.Context, in *pb.QueryProfileRequest) (
 }
 
 func (s *server) UpdateProfile(ctx context.Context, in *pb.UpdateProfileRequest) (*pb.Profile, error) {
-	return nil, nil
+	const op = errors.Op("UserProfileGrpcService.UpdateProfile")
+
+	profile, err := s.upService.UpdateProfile(ctx, in)
+	if err != nil {
+		return nil, errors.E(op, err)
+	}
+
+	return profile, nil
 }
 
 func (s *server) DeleteProfile(ctx context.Context, in *pb.UsernameRequest) (*common.EmptyRequest, error) {
@@ -48,13 +55,34 @@ func (s *server) DeleteProfile(ctx context.Context, in *pb.UsernameRequest) (*co
 }
 
 func (s *server) GetProfile(ctx context.Context, in *pb.UsernameRequest) (*pb.Profile, error) {
-	return nil, nil
+	const op = errors.Op("UserProfileGrpcService.GetProfile")
+
+	profile, err := s.upService.GetProfile(ctx, in.Username)
+	if err != nil {
+		return nil, errors.E(op, err)
+	}
+
+	return profile, nil
 }
 
 func (s *server) GetProfilePic(ctx context.Context, in *pb.UsernameRequest) (*common.Image, error) {
-	return nil, nil
+	const op = errors.Op("UserProfileGrpcService.GetProfile")
+
+	pic, err := s.upService.GetProfilePic(ctx, in.Username)
+	if err != nil {
+		return nil, errors.E(op, err)
+	}
+
+	return pic, nil
 }
 
 func (s *server) CheckCred(ctx context.Context, in *pb.CheckCredRequest) (*common.EmptyRequest, error) {
-	return nil, nil
+	const op = errors.Op("UserProfileGrpcService.CheckCred")
+
+	err := s.upService.CheckCred(ctx, in.GetUsername(), in.GetPassword())
+	if err != nil {
+		return nil, errors.E(op, err)
+	}
+
+	return &common.EmptyRequest{}, nil
 }

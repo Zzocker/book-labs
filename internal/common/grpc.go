@@ -23,7 +23,7 @@ func LoggerServerInteroceptor(ctx context.Context, req interface{}, info *grpc.U
 	lg := logger.WithFields(map[string]interface{}{
 		"request_id": id,
 	})
-	lg.Infof("RPC : %s", info.FullMethod)
+	lg.Infof("method = %s", info.FullMethod)
 
 	ctx = context.WithValue(ctx, reqID, lg)
 
@@ -34,6 +34,8 @@ func LoggerServerInteroceptor(ctx context.Context, req interface{}, info *grpc.U
 
 		return nil, status.Error(codes.Code(errors.ErrCode(err)), err.Error())
 	}
+
+	lg.Infof("SUCCESS")
 
 	return res, nil
 }

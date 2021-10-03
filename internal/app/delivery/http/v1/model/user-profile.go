@@ -6,3 +6,9 @@ type CreateProfileRequest struct {
 	Name     string `form:"name"`
 	Password string `form:"password"`
 }
+
+type UserProfile struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+}

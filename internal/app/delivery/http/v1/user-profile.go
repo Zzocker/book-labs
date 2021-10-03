@@ -26,6 +26,7 @@ func newUserProfileRouter(handler *gin.RouterGroup, channel grpc.ClientConnInter
 		h.PATCH("", u.updateUserProfile)
 		h.DELETE("", u.deleteUserProfile)
 		h.GET("/:username", u.getUserProfile)
+		h.GET("/pic/:username", u.getUserProfilePic)
 	}
 }
 
@@ -78,7 +79,7 @@ func (u *userProfileRouter) newUserProfile(ctx *gin.Context) {
 		s := status.Convert(err)
 		err = errors.E(
 			op,
-			fmt.Errorf("failed to call user-profile service : %s", s.Message()),
+			fmt.Errorf(s.Message()),
 			errors.Code(s.Code()),
 			errors.SeverityDebug,
 		)
@@ -94,10 +95,121 @@ func (u *userProfileRouter) queryUserProfile(ctx *gin.Context) {
 }
 
 func (u *userProfileRouter) updateUserProfile(ctx *gin.Context) {
+	const op = errors.Op("UserProfileRouter.updateUserProfile")
+	var req model.CreateProfileRequest
+	err := ctx.ShouldBind(&req)
+	if err != nil {
+		err = errors.E(
+			op,
+			err,
+			errors.CodeInvalidInput,
+			errors.SeverityDebug,
+		)
+		errResponse(ctx, err)
+
+		return
+	}
+	var profilePic []byte
+	fh, err := ctx.FormFile("profile_pic")
+	if err == nil && fh != nil {
+		f, err := fh.Open() //nolint:govet //ignore
+		if err != nil {
+			err = errors.E(
+				op,
+				fmt.Errorf("failed to read profile_pic file : %w", err),
+				errors.CodeInvalidInput,
+				errors.SeverityDebug,
+			)
+			errResponse(ctx, err)
+
+			return
+		}
+		defer f.Close()
+		profilePic = make([]byte, fh.Size)
+		f.Read(profilePic) //nolint:errcheck //not required
+	}
+
+	lg := loggerWithReqID(ctx)
+	lg.Debugf("sending request to user-profile service")
+	profile, err := pb.NewUserProfileClient(u.channel).UpdateProfile(gRPCCtxWithReqID(ctx), &pb.UpdateProfileRequest{
+		Username:   ctx.GetString(usernameKey),
+		Email:      req.Email,
+		Name:       req.Name,
+		Password:   req.Password,
+		ProfilePic: profilePic,
+	})
+	if err != nil {
+		s := status.Convert(err)
+		err = errors.E(
+			op,
+			fmt.Errorf(s.Message()),
+			errors.Code(s.Code()),
+			errors.SeverityDebug,
+		)
+		errResponse(ctx, err)
+
+		return
+	}
+	ctx.JSON(http.StatusOK, model.UserProfile{
+		Username: profile.GetUsername(),
+		Email:    profile.GetEmail(),
+		Name:     profile.GetName(),
+	})
 }
 
 func (u *userProfileRouter) deleteUserProfile(ctx *gin.Context) {
 }
 
 func (u *userProfileRouter) getUserProfile(ctx *gin.Context) {
+	const op = errors.Op("UserProfileRouter.newUserProfile")
+	username := ctx.Param("username")
+
+	loggerWithReqID(ctx).Debugf("sending request to user-profile service")
+	profile, err := pb.NewUserProfileClient(u.channel).GetProfile(gRPCCtxWithReqID(ctx), &pb.UsernameRequest{
+		Username: username,
+	})
+	if err != nil {
+		s := status.Convert(err)
+		err = errors.E(
+			op,
+			fmt.Errorf(s.Message()),
+			errors.Code(s.Code()),
+			errors.SeverityDebug,
+		)
+		errResponse(ctx, err)
+
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.UserProfile{
+		Username: profile.GetUsername(),
+		Email:    profile.GetEmail(),
+		Name:     profile.GetName(),
+	})
+}
+
+func (u *userProfileRouter) getUserProfilePic(ctx *gin.Context) {
+	const op = errors.Op("UserProfileRouter.getUserProfilePic")
+	username := ctx.Param("username")
+
+	loggerWithReqID(ctx).Debugf("sending request to user-profile service")
+	pic, err := pb.NewUserProfileClient(u.channel).GetProfilePic(gRPCCtxWithReqID(ctx), &pb.UsernameRequest{
+		Username: username,
+	})
+	if err != nil {
+		s := status.Convert(err)
+		err = errors.E(
+			op,
+			fmt.Errorf(s.Message()),
+			errors.Code(s.Code()),
+			errors.SeverityDebug,
+		)
+		errResponse(ctx, err)
+
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.Image{
+		Data: pic.GetData(),
+	})
 }

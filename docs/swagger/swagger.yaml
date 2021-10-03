@@ -107,6 +107,13 @@ components:
         profile_pic:
           type: string
           format: binary
+    profilePic:
+      type: object
+      properties:
+        data:
+          type: string
+          format: base64
+          description: base64 encoded image file
     ### books
     createBookReq:
       type: object
@@ -389,6 +396,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/userProfile"
 
+  /user_profile/pic/{username}:
+    get:
+      tags:
+        - User-Profile
+      description: "Get profile picture of an user"
+      summary: Get profile picture of an user
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            example: Zzocker
+      responses:
+        200:
+          description: SUCCESS
+          content:
+            application/json: 
+              schema:
+                $ref : "#/components/schemas/profilePic"
   /book:
     post:
       tags:

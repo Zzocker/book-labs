@@ -6,19 +6,23 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 
 	"github.com/Zzocker/book-labs/internal/app/delivery/http/v1/model"
 	"github.com/Zzocker/book-labs/internal/app/domain"
 	"github.com/Zzocker/book-labs/internal/app/service"
 	"github.com/Zzocker/book-labs/pkg/errors"
+	pb "github.com/Zzocker/book-labs/protos/profile"
 )
 
 type authService struct {
-	servs service.Auth
+	servs             service.Auth
+	profileRPCChannel grpc.ClientConnInterface
 }
 
-func newAuthRouters(handler *gin.RouterGroup, servs service.Auth) {
-	a := authService{servs: servs}
+func newAuthRouters(handler *gin.RouterGroup, servs service.Auth, profileRPCChannel grpc.ClientConnInterface) {
+	a := authService{servs: servs, profileRPCChannel: profileRPCChannel}
 
 	h := handler.Group("/auth")
 	{
@@ -39,6 +43,25 @@ func (a *authService) newToken(c *gin.Context) {
 			op,
 			err,
 			errors.CodeInvalidInput,
+			errors.SeverityDebug,
+		)
+		errResponse(c, err)
+
+		return
+	}
+
+	loggerWithReqID(c).Debugf("sending request to user-profile service")
+	_, err = pb.NewUserProfileClient(a.profileRPCChannel).CheckCred(gRPCCtxWithReqID(c), &pb.CheckCredRequest{
+		Username: input.Username,
+		Password: input.Password,
+	})
+
+	if err != nil {
+		s := status.Convert(err)
+		err = errors.E(
+			op,
+			fmt.Errorf(s.Message()),
+			errors.Code(s.Code()),
 			errors.SeverityDebug,
 		)
 		errResponse(c, err)
