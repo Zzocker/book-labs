@@ -182,7 +182,17 @@ components:
         back_cover:
           type: string
           format: binary
-    
+    bookPic:
+      type: object
+      properties:
+        front:
+          type: string
+          format: base64
+          description: base64 encoded front cover
+        back:
+          type: string
+          format: base64
+          description: base64 encoded back cover
     ### comment
     createCommentReq:
       type: object
@@ -525,6 +535,26 @@ paths:
       responses:
         204:
           description: Success
+  /book/pic/{uuid}:
+    get:
+      tags:
+        - Books
+      description: "Get cover picture of a book"
+      summary: Get profile picture of a book
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 010554545
+      responses:
+        200:
+          description: SUCCESS
+          content:
+            application/json: 
+              schema:
+                $ref : "#/components/schemas/bookPic"
   /comment:
     post:
       tags:

@@ -4,6 +4,7 @@ type BookSharing struct {
 	App         App         `yaml:"app"`
 	UserProfile UserProfile `yaml:"userprofile"`
 	MongoDB     MongoDB     `yaml:"mongo_db"`
+	Book        Book        `yaml:"book"`
 	S3          S3          `yaml:"s3"`
 }
 
@@ -28,6 +29,14 @@ type UserProfile struct {
 	LogLevel          string `yaml:"log_level" env:"USERPROFILE_LOG_LEVEL" env-required:"true"`
 	CollectionName    string `yaml:"collection_name" env:"USERPROFILE_COLLECTION_NAME" env-required:"true"`
 	ProfileBucketName string `yaml:"s3_bucket_name" env:"USERPROFILE_S3_BUCKET" env-required:"true"`
+}
+
+type Book struct {
+	Port           string `yaml:"port" env:"BOOK_PORT" env-required:"true"`
+	Version        string `yaml:"version" env:"BOOK_VERSION" env-default:"1.0.0"`
+	LogLevel       string `yaml:"log_level" env:"BOOK_LOG_LEVEL" env-required:"true"`
+	CollectionName string `yaml:"collection_name" env:"BOOK_COLLECTION_NAME" env-required:"true"`
+	BookBucketName string `yaml:"s3_bucket_name" env:"BOOK_S3_BUCKET" env-required:"true"`
 }
 
 type MongoDB struct {

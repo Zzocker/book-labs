@@ -13,6 +13,12 @@ userprofile:
   log_level: debug
   collection_name: userprofile
   s3_bucket_name: dev
+book:
+  port: 9003
+  version: 1.0.0
+  log_level: debug
+  collection_name: book
+  s3_bucket_name: dev
 
 # Datastore configs
 mongo_db:

@@ -7,6 +7,7 @@ option go_package="github.com/Zzocker/book-labs/protos/common";
 message EmptyRequest{
 }
 
+message EmptyResponse{}
 message Image{
     bytes Data=1;
 }
