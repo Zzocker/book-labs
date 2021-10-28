@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Zzocker/book-labs/pkg/errors"
 	"github.com/google/uuid"
+
+	"github.com/Zzocker/book-labs/pkg/errors"
 )
 
 type AuthToken struct {

@@ -17,6 +17,7 @@ func NewMockKVStore() KVStore {
 
 func (k *kvMock) Set(ctx context.Context, key string, value []byte) error {
 	k.backend[key] = value
+
 	return nil
 }
 

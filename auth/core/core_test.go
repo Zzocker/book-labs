@@ -5,10 +5,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/Zzocker/book-labs/auth/clients"
 	"github.com/Zzocker/book-labs/pkg/datastore"
 	"github.com/Zzocker/book-labs/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCreate(t *testing.T) {

@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Zzocker/book-labs/pkg/errors"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/Zzocker/book-labs/pkg/errors"
 )
 
 func TestNew(t *testing.T) {
