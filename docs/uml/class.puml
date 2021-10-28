@@ -1,0 +1,190 @@
+@startuml
+
+left to right direction
+
+class UserProfile{
+    + ID string
+    + Name string
+    + Email string
+    + ProfilePicID string
+    + EthPublicKey string
+    + Rating NetRating
+    + HashedSecret string
+    + RegistredAt integer
+
+    + newProfile()
+    + updatePassword()
+    + update()
+    + updateEthPublicKey()
+    + deleteProfile()
+    + getProfile()
+    + searchProfile()
+}
+
+class NetRating{
+    + ID string
+    + Count integer
+    + Value float
+}
+
+UserProfile o-- NetRating
+
+abstract class Rating{
+    + ID string
+    + UserID string
+    + RecipientID string
+    + Value integer
+
+    + get():Rating
+    + update():void
+    + delete():void
+    + new()
+}
+
+class UserRating{
+    + get():Rating
+    + update():void
+    + delete():void
+    + new()
+}
+class BookRating{
+    + get():Rating
+    + update():void
+    + delete():void
+    + new()
+}
+
+
+UserRating <|-- Rating
+BookRating <|-- Rating 
+
+
+class Book{
+    + ISBN string
+    + Name string
+    + Description string
+    + Authors []string
+    + Genre []string
+    + FrontCoverID string
+    + BackCoverID string
+    + AddedAt integer
+    + OwnerID string
+    + CurrentOwnerID string
+
+    + addBook()
+    + update()
+    + getBook()
+    + search()
+    + delete()
+    + transferBook()
+    + lendBook()
+}
+
+Book o-- NetRating
+
+class Transaction{
+    + ID string
+    + BookID string
+    + Amount float
+    + Type TransactionType
+    + Status TransactionStatus
+    + PayeeID string
+    + RecipientID string
+    + EthTxID string
+
+    + new()
+    + getTx()
+    + getUserTxs() []Transaction
+    + deleteTx()
+}
+
+Transaction o-- TransactionType
+Transaction o-- TransactionStatus
+
+enum TransactionType{
+    BOOK_RENTAL
+    BOOK_TRANSFER
+}
+
+enum TransactionStatus{
+    NOT_PAID
+    PAYMENT_CONFIRMED
+}
+
+abstract class Comment{
+    + ID string
+    + UserID string
+    + RecipientID string
+    + Value string
+    + MediaFileID string
+
+    # new()
+    # get()
+    # delete()
+    # update()
+    # search()
+}
+
+
+class CommentOnUserProfile{
+    + new()
+    + get()
+    + delete()
+    + update()
+    + getAll() 
+}
+
+class CommentOnBook{
+    + new()
+    + get()
+    + delete()
+    + update()
+    + getAll() 
+}
+
+class CommentOnComment{
+    + new()
+    + get()
+    + delete()
+    + update()
+    + getAll() 
+}
+
+CommentOnUserProfile <|-- Comment
+CommentOnBook <|-- Comment
+CommentOnComment <|-- Comment
+
+class MediaFile{
+    + ID string
+    + Data []byte
+    + Extension string
+    + Size integer
+    + Type MediaFile
+    + CreationTime integer
+    + UpdateTime integer
+
+    + new()
+    + get()
+    + delete()
+    + update()
+}
+
+enum MediaFileType{
+    BOOK
+    USER
+    COMMENT
+}
+
+MediaFile o-- MediaFileType
+
+
+class AuthToken{
+    ID string
+    UserID string
+    CreationTime integer
+    ExpiryTime integer
+}
+
+
+
+@enduml
