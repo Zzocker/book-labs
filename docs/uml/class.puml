@@ -179,10 +179,16 @@ MediaFile o-- MediaFileType
 
 
 class AuthToken{
-    ID string
-    UserID string
-    CreationTime integer
-    ExpiryTime integer
+    + ID string
+    + UserID string
+    + CreationTime integer
+    + ExpiryTime integer
+
+    + create()
+    + refresh()
+    + delete()
+    + get()
+    + logout()
 }
 
 
