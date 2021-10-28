@@ -1,8 +1,11 @@
 package model
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
+	"github.com/Zzocker/book-labs/pkg/errors"
 	"github.com/google/uuid"
 )
 
@@ -27,4 +30,19 @@ func (a *AuthToken) Refresh(expiryS int) {
 
 func (a *AuthToken) IsExpired() bool {
 	return time.Now().Unix() > a.ExpiryTime
+}
+
+func (a *AuthToken) ToBytes() []byte {
+	raw, _ := json.Marshal(a) //nolint:errcheck //not required
+
+	return raw
+}
+
+func (a *AuthToken) FromBytes(op errors.Op, raw []byte) error {
+	err := json.Unmarshal(raw, a)
+	if err != nil {
+		return errors.E(op, fmt.Errorf("failed to unmarshal token: %w", err), errors.CodeInternal)
+	}
+
+	return nil
 }
