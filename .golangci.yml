@@ -85,7 +85,6 @@ linters:
     - gomnd
     - gomodguard
     - goprintffuncname
-    - gosec
     - gosimple
     - govet
     - ineffassign
