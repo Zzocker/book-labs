@@ -85,11 +85,11 @@ func (l *internalLg) Error(args ...interface{}) {
 }
 
 func Debugf(format string, args ...interface{}) {
-	lg.Debugf(format, args)
+	lg.Debugf(format, args...)
 }
 
 func Debug(args ...interface{}) {
-	lg.Debug(args)
+	lg.Debug(args...)
 }
 
 func Infof(format string, args ...interface{}) {
@@ -97,7 +97,7 @@ func Infof(format string, args ...interface{}) {
 }
 
 func Info(args ...interface{}) {
-	lg.Info(args)
+	lg.Info(args...)
 }
 
 func Warnf(format string, args ...interface{}) {
@@ -105,7 +105,7 @@ func Warnf(format string, args ...interface{}) {
 }
 
 func Warn(args ...interface{}) {
-	lg.Warn(args)
+	lg.Warn(args...)
 }
 
 func Errorf(format string, args ...interface{}) {
@@ -113,5 +113,5 @@ func Errorf(format string, args ...interface{}) {
 }
 
 func Error(args ...interface{}) {
-	lg.Error(args)
+	lg.Error(args...)
 }

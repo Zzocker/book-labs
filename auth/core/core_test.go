@@ -10,9 +10,11 @@ import (
 	"github.com/Zzocker/book-labs/auth/clients"
 	"github.com/Zzocker/book-labs/pkg/datastore"
 	"github.com/Zzocker/book-labs/pkg/errors"
+	"github.com/Zzocker/book-labs/pkg/logger"
 )
 
 func TestCreate(t *testing.T) {
+	logger.Setup("debug", "AuthCode_Test", "1.0.0")
 	is := assert.New(t)
 
 	ctx := context.Background()
@@ -34,9 +36,23 @@ func TestCreate(t *testing.T) {
 		_, err := aCore.Create(ctx, "user1", "wrongPW")
 		is.Error(err)
 	})
+
+	t.Run("logged-out", func(t *testing.T) {
+		err := aCore.Logout(ctx, "user1")
+		is.NoError(err)
+
+		token, err := aCore.Create(ctx, "user1", "user1pw")
+		is.NoError(err)
+		is.NotNil(token)
+
+		_, err = aCore.store.Get(ctx, getLogoutKey("user1"))
+		is.Error(err)
+		is.Equal(errors.CodeNotFound, errors.ErrCode(err))
+	})
 }
 
 func TestGet(t *testing.T) {
+	logger.Setup("debug", "AuthCode_Test", "1.0.0")
 	is := assert.New(t)
 
 	ctx := context.Background()
@@ -69,9 +85,22 @@ func TestGet(t *testing.T) {
 		is.Error(err)
 		is.Equal(errors.CodeUnauthenticated, errors.ErrCode(err))
 	})
+
+	t.Run("logged-out", func(t *testing.T) {
+		token, err := aCore.Create(ctx, "user1", "user1pw")
+		is.NoError(err)
+
+		err = aCore.Logout(ctx, "user1")
+		is.NoError(err)
+
+		_, err = aCore.Get(ctx, token.ID)
+		is.Error(err)
+		is.Equal(errors.CodeUnauthenticated, errors.ErrCode(err))
+	})
 }
 
 func TestRefresh(t *testing.T) {
+	logger.Setup("debug", "AuthCode_Test", "1.0.0")
 	is := assert.New(t)
 
 	ctx := context.Background()
@@ -101,6 +130,7 @@ func TestRefresh(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	logger.Setup("debug", "AuthCode_Test", "1.0.0")
 	is := assert.New(t)
 
 	ctx := context.Background()
@@ -126,4 +156,23 @@ func TestDelete(t *testing.T) {
 		err := aCore.Delete(ctx, "not-found")
 		is.Error(err)
 	})
+}
+
+func TestLogout(t *testing.T) {
+	logger.Setup("debug", "AuthCode_Test", "1.0.0")
+	is := assert.New(t)
+
+	ctx := context.Background()
+	aCore := AuthCore{
+		store:   datastore.NewMockKVStore(),
+		up:      clients.NewMockUserProfileClient(),
+		expiryS: 1,
+	}
+
+	err := aCore.Logout(ctx, "user1")
+	is.NoError(err)
+
+	raw, err := aCore.store.Get(ctx, getLogoutKey("user1"))
+	is.NoError(err)
+	is.NotNil(raw)
 }
