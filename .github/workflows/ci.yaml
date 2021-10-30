@@ -18,5 +18,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - name: start docker containers
+        run: make demo
+      - name: migration
+        run: make migrate
       - name: Run test
         run: make test

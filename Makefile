@@ -15,3 +15,14 @@ lint:
 
 fix-lint:
 	golangci-lint run --fix
+
+proto:
+	protoc -I protos/ --go_out ${GOPATH}/src/ protos/common/common.proto
+	protoc -I protos/ --go_out ${GOPATH}/src/ protos/mediafile/mediafile.proto
+	protoc -I protos/ --go-grpc_out ${GOPATH}/src/ protos/mediafile/mediafile.proto
+
+demo:
+	docker-compose -f docker-compose.yaml up -d
+
+migrate:
+	./migration/s3.sh

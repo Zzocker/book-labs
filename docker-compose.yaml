@@ -1,0 +1,27 @@
+version: "3.9"
+
+networks:
+  book_sharing:
+
+volumes:
+  localS3:
+
+services:
+  localS3:
+      container_name: localS3
+      image: localstack/localstack:0.12.18
+      ports:
+        - 4566:4566
+        - 4571:4571
+        - 8080:8080
+      environment:
+        - SERVICES=s3
+        - DEBUG=DEBUG
+        - DATA_DIR=/tmp/localstack/data
+        - PORT_WEB_UI=8080
+        - DOCKER_HOST=unix:///var/run/docker.sock
+      volumes:
+        - localS3:/tmp/localstack
+        - /var/run/docker.sock:/var/run/docker.sock
+      networks:
+        - book_sharing

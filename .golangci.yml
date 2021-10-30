@@ -122,3 +122,4 @@ issues:
 run:
   skip-dirs:
     - docs
+    - protos
