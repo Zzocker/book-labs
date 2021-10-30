@@ -44,4 +44,4 @@ Service allowing user's to add comment to a users, books, or on another comment.
 
 ### Class Diagram
 
-![class_diagram](docs/uml/img/class.png)
+![class_diagram](docs/img/class.png)
