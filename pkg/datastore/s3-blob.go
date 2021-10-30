@@ -50,13 +50,13 @@ func NewS3BlobDatastore(cfg *S3BlobStoreConfig) BlobStore {
 	}
 }
 
-func (s *awsS3) Put(ctx context.Context, id string, data []byte, metadata map[string]*string) error {
+func (s *awsS3) Put(ctx context.Context, id string, data []byte, metadata map[string]string) error {
 	const op = errors.Op("S3BlobDatastore.Put")
 	_, err := s.uploader.UploadWithContext(ctx, &s3manager.UploadInput{
 		Body:     bytes.NewReader(data),
 		Bucket:   aws.String(s.bucketName),
 		Key:      aws.String(id),
-		Metadata: metadata,
+		Metadata: aws.StringMap(metadata),
 	})
 	if err != nil {
 		return errors.E(op, err, errors.CodeInternal)
@@ -87,10 +87,14 @@ func (s *awsS3) Get(ctx context.Context, id string) (*BlobFile, error) {
 	if err != nil {
 		return nil, errors.E(op, fmt.Errorf("failed to read blob data: %w", err), errors.CodeInternal)
 	}
+	md := map[string]string{}
+	for key, value := range obj.Metadata {
+		md[key] = *value
+	}
 
 	return &BlobFile{
 		Data:     data,
-		Metadata: obj.Metadata,
+		Metadata: md,
 	}, nil
 }
 

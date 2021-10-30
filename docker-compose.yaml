@@ -25,3 +25,23 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - book_sharing
+  mediafile:
+      container_name: mediafile
+      build: 
+        context: .
+        dockerfile: ./Dockerfiles/Dockerfile.mediafile
+      environment:
+        - MEDIAFILE_PORT=9001
+        - MEDIAFILE_LOG_LEVEL=debug
+        - MEDIAFILE_LOG_NAME=mediafil
+        - MEDIAFILE_LOG_VERSION=1.0.0
+        - MEDIAFILE_S3CONFIG_ENDPOINT=http://localS3:4566
+        - MEDIAFILE_S3CONFIG_ACCESSKEY_ID=test
+        - MEDIAFILE_S3CONFIG_SECRET_ACCESS_KEY=test
+        - MEDIAFILE_S3CONFIG_REGION=ap-southeast-1
+        - MEDIAFILE_S3CONFIG_BUCKET_NAME=dev
+      networks:
+        - book_sharing
+      command: -env
+      ports:
+        - 9001:9001

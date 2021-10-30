@@ -1,0 +1,12 @@
+port: 9001
+log:
+  level: debug
+  name: mediafile
+  version: 1.0.0
+s3_config:
+  endpoint: http://localhost:4566
+  accessKeyID: test
+  secretAccessKey: test
+  sessionToken: 
+  region: ap-southeast-1
+  bucketName: dev

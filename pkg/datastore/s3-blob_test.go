@@ -23,8 +23,8 @@ func TestS3Blob(t *testing.T) {
 	id := "testS3Blob"
 	data := "testS3Blob_data"
 	extension := "txt"
-	mt := map[string]*string{
-		"Extension": &extension,
+	mt := map[string]string{
+		"Extension": extension,
 	}
 	t.Run("Put", func(t *testing.T) {
 		err := store.Put(ctx, id, []byte(data), mt)
@@ -35,7 +35,7 @@ func TestS3Blob(t *testing.T) {
 		bfile, err := store.Get(ctx, id)
 		is.NoError(err)
 		is.Equal(data, string(bfile.Data))
-		is.Equal(extension, *bfile.Metadata["Extension"])
+		is.Equal(extension, bfile.Metadata["Extension"])
 	})
 
 	t.Run("Del", func(t *testing.T) {

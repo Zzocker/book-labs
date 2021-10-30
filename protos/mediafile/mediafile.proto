@@ -1,0 +1,31 @@
+syntax="proto3";
+
+package mediafile;
+
+import "common/common.proto";
+
+option go_package="github.com/Zzocker/book-labs/protos/mediafile";
+
+message MediaFile{
+    string ID=1;
+    bytes Data=2;
+    string Extension=3;
+    MediaFileType Type=4;
+}
+
+message MediaFileID{
+    string ID=1;
+}
+
+enum MediaFileType{
+    UNKNOWN=0;
+    BOOK=1;
+    USER=2;
+    COMMENT=3;
+}
+
+service MediaFileService{
+    rpc Upload(MediaFile) returns (MediaFileID);
+    rpc Get(MediaFileID) returns (MediaFile);
+    rpc Delete(MediaFileID) returns (common.Empty);
+}

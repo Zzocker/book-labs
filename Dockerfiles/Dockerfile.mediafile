@@ -1,0 +1,17 @@
+FROM golang:alpine as builder
+
+WORKDIR /book-labs
+
+COPY . .
+
+RUN go mod download
+
+WORKDIR /book-labs/mediafile
+
+RUN go build -o mediafile
+
+FROM alpine
+
+COPY --from=builder /book-labs/mediafile/mediafile /book-labs/mediafile
+
+ENTRYPOINT [ "/book-labs/mediafile" ]

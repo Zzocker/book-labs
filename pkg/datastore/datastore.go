@@ -11,11 +11,11 @@ type KVStore interface {
 
 type BlobFile struct {
 	Data     []byte
-	Metadata map[string]*string
+	Metadata map[string]string
 }
 
 type BlobStore interface {
-	Put(ctx context.Context, ID string, data []byte, metadata map[string]*string) error
+	Put(ctx context.Context, ID string, data []byte, metadata map[string]string) error
 	Get(ctx context.Context, ID string) (*BlobFile, error)
 	Del(ctx context.Context, ID string) error
 }
