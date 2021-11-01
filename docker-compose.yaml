@@ -6,6 +6,7 @@ networks:
 volumes:
   localS3:
   redis_db:
+  mongo_db:
 
 services:
   localS3:
@@ -26,6 +27,18 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       networks:
         - book_sharing
+  mongo_db:
+    container_name: mongo_db
+    image: mongo:5
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pw
+    ports:
+      - 27017:27017
+    networks:
+      - book_sharing
+    volumes:
+      - mongo_db:/data/db
   redis:
     container_name: redis_db
     image: redis:6

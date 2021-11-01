@@ -19,3 +19,11 @@ type BlobStore interface {
 	Get(ctx context.Context, ID string) (*BlobFile, error)
 	Del(ctx context.Context, ID string) error
 }
+
+type RichStore interface {
+	Put(ctx context.Context, in interface{}) error
+	Get(ctx context.Context, filter map[string]interface{}) ([]byte, error)
+	Update(ctx context.Context, filter map[string]interface{}, in interface{}) error
+	Delete(ctx context.Context, filter map[string]interface{}) error
+	Query(ctx context.Context, query map[string]interface{}) ([][]byte, error)
+}
