@@ -7,7 +7,6 @@ class UserProfile{
     + Name string
     + Email string
     + ProfilePicID string
-    + EthPublicKey string
     + Rating NetRating
     + HashedSecret string
     + RegistredAt integer
@@ -15,7 +14,6 @@ class UserProfile{
     + newProfile()
     + updatePassword()
     + update()
-    + updateEthPublicKey()
     + deleteProfile()
     + getProfile()
     + searchProfile()
